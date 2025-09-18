@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import { engine } from 'express-handlebars';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import route from './routes/index.js';
 
 // Tạo __filename, __dirname trong môi trường ES Module
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +16,9 @@ const port = 3000;
 // Static file
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // HTTP logger
 app.use(morgan('combined'));
 
@@ -24,15 +28,9 @@ app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
 
 // Route
-app.get('/', (req, res) => {
-  res.render('home');
-});
-
-app.get('/news', (req, res) => {
-  res.render('news');
-});
+route(app);
 
 // Start server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+    console.log(`Example app listening on port ${port}`);
 });
